@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freifunk Leaflet Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #overlay_header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            color: #333;
+            padding: 0 20px;
+            text-align: center;
+            z-index: 1000;
+            /* width fit to content */
+            width: -moz-fit-content;
+            width: fit-content;
+            margin: 0 auto;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid #333;
+            border-right: 1px solid #333;
+            border-left: 1px solid #333;
+            font-family: RobotoDraft,Roboto,'Helvetica Neue',sans-serif;
+
+        }
+        #overlay_header img {
+            float: left;
+            height: 40px;
+            margin: 7px 10px 10px 10px;
+        }
+        #overlay_header h1 {
+            float: left;
+            margin: 0;
+            padding: 10px 0;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Responsive */
+        /* smaller font for smartphones */
+        @media (max-width: 600px) {
+            #overlay_header {
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay_header">
+        <img src="logo.png" alt="Freifunk Logo" />
+        <h1>Freifunk Dom&auml;nina</h1>
+    </div>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+    <script src="config.js"></script> <!-- Hier wird die config.js eingebunden -->
+    <script>
+        // Karte initialisieren
+        var map = L.map('map').setView([51.93, 7.4], 10);
+
+        // OpenStreetMap Layer hinzufügen
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Farben definieren
+        var bcolors = ['#FFFF33', '#FF3300', '#3366CC', '#660033', '#FF3333', '#0000FF', '#00FF99', '#CC3333', '#996666', '#333300', '#FF9900', '#330066', '#CC6666', '#FF0099', '#006600', '#009966', '#CC3399', '#0000CC', '#FF6600', '#FFCC00', '#6666FF', '#993366', '#330000', '#CC9933', '#FF6633', '#CC6699', '#CC0033', '#FF99FF', '#CC00CC', '#FFCC99', '#663366', '#0066CC', '#6699FF', '#00CCCC', '#33CCCC', '#33FF99', '#00FF33', '#CCFF33', '#999966', '#FF9933'];
+
+        function getColor() {
+            var color = bcolors.shift();
+            bcolors.push(color);
+            return color;
+        }
+
+        function getStyle(color) {
+            return {
+                fillColor: color,
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.5
+            };
+        }
+
+        // Domains aus der config.js laden
+        Object.keys(domains).forEach(function(domainKey) {
+            var domain = domains[domainKey];
+            var geojsonPath = "/shapes/" + domain.id + ".geojson";
+
+            // GeoJSON laden und der Karte hinzufügen
+            fetch(geojsonPath)
+                .then(response => response.json())
+                .then(data => {
+                    L.geoJSON(data, {
+                        style: getStyle(getColor())
+                    }).addTo(map).bindPopup("<strong>" + domain.id.replace("domaene", "Dom&auml;ne &#35;") + "</strong><br>Name: " + domain.name);
+                })
+                .catch(error => console.error("Fehler beim Laden von GeoJSON:", error));
+        });
+        L.control.locate({drawCircle: false, locateOptions:{enableHighAccuracy: true, maxZoom: 16}}).addTo(map);
+
+        // Event für Kartenklicks
+        // map.on('click', function(e) {
+        //     alert("Karte geklickt bei: " + e.latlng);
+        // });
+    </script>
+</body>
+</html>
