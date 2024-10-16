@@ -11,32 +11,39 @@
             margin: 0;
             padding: 0;
         }
-        #overlay_header {
+        #overlay_header_wrapper {
             position: absolute;
             top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
+            text-align: center;
+            margin: auto 0;
+            overflow: hidden;
+            z-index: 1000;
+            
+        }
+        #overlay_header {
+            position: relative;
             background-color: white;
             color: #333;
             padding: 0 20px;
             text-align: center;
-            z-index: 1000;
-            /* width fit to content */
-            width: -moz-fit-content;
-            width: fit-content;
-            margin: 0 auto;
             border-radius: 0 0 10px 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             border-bottom: 1px solid #333;
             border-right: 1px solid #333;
             border-left: 1px solid #333;
             font-family: RobotoDraft,Roboto,'Helvetica Neue',sans-serif;
-
+            overflow: hidden;
+            display: inline-block;
         }
+
         #overlay_header img {
             float: left;
-            height: 40px;
-            margin: 7px 10px 10px 10px;
+            width: 55px;
+            height: auto;
+            margin: 5px 10px 5px 0px;
         }
         #overlay_header h1 {
             float: left;
@@ -50,19 +57,23 @@
             width: 100%;
         }
 
-        /* Responsive */
-        /* smaller font for smartphones */
-        @media (max-width: 600px) {
+        @media (max-width: 600px ) {
             #overlay_header {
-                font-size: 0.8em;
+                font-size: 2.7vw;
+            }
+            #overlay_header img {
+                width: 9vw;
+                height: auto;
             }
         }
     </style>
 </head>
 <body>
-    <div id="overlay_header">
-        <img src="logo.png" alt="Freifunk Logo" />
-        <h1>Freifunk Dom&auml;nina</h1>
+    <div id="overlay_header_wrapper">
+        <div id="overlay_header">
+            <img src="logo.png" alt="Freifunk Logo" />
+            <h1>Freifunk Dom&auml;nina</h1>
+        </div>
     </div>
     <div id="map"></div>
 
