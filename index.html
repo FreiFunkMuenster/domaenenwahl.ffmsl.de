@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Freifunk Leaflet Map</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+    <link rel="stylesheet" href="/libs/leaflet.css" />
+    <link rel="stylesheet" href="/libs/L.Control.Locate.min.css" />
     <style>
         body {
             margin: 0;
@@ -76,8 +76,8 @@
     </div>
     <div id="map"></div>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+    <script src="/libs/leaflet.js"></script>
+    <script src="/libs/L.Control.Locate.min.js" charset="utf-8"></script>
     <script src="config.js"></script> <!-- Hier wird die config.js eingebunden -->
     <script>
         // Karte initialisieren
@@ -124,11 +124,6 @@
                 .catch(error => console.error("Fehler beim Laden von GeoJSON:", error));
         });
         L.control.locate({drawCircle: false, locateOptions:{enableHighAccuracy: true, maxZoom: 16}}).addTo(map);
-
-        // Event für Kartenklicks
-        // map.on('click', function(e) {
-        //     alert("Karte geklickt bei: " + e.latlng);
-        // });
     </script>
 </body>
 </html>
